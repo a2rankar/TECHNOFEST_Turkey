@@ -1,14 +1,24 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+model Zone {
+  id            Int           @id @default(autoincrement())
+  name          String
+  status        String        @default("normal")
+  sensorData    SensorData[]
+}
+
+model SensorData {
+  id            Int      @id @default(autoincrement())
+  zone          Zone     @relation(fields: [zoneId], references: [id])
+  zoneId        Int
+  soil_moisture Float
+  temperature   Float
+  humidity      Float
+  createdAt     DateTime @default(now())
 }
